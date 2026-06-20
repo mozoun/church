@@ -1,22 +1,36 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase, type SpecialEvent } from '@/lib/supabase';
 import { Edit2, Trash2, Save, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+interface SpecialEvent {
+  id: string;
+  title: string;
+  description: string;
+  eventDate: string;
+  startTime: string;
+  endTime: string | null;
+  location: string | null;
+  imageUrl: string | null;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export default function ManageEvents() {
   const [events, setEvents] = useState<SpecialEvent[]>([]);
+  const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    event_date: '',
-    start_time: '',
-    end_time: '',
+    eventDate: '',
+    startTime: '',
+    endTime: '',
     location: '',
-    image_url: '',
-    is_published: true,
+    imageUrl: '',
+    isPublished: true,
   });
 
   useEffect(() => {
@@ -25,16 +39,15 @@ export default function ManageEvents() {
 
   async function fetchEvents() {
     try {
-      const { data, error } = await supabase
-        .from('special_events')
-        .select('*')
-        .order('event_date', { ascending: false });
-
-      if (error) throw error;
+      const response = await fetch('/api/events');
+      if (!response.ok) throw new Error('Failed to fetch events');
+      const data = await response.json();
       setEvents(data || []);
     } catch (error) {
       console.error('Error fetching events:', error);
       toast.error('Failed to load events');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -43,19 +56,24 @@ export default function ManageEvents() {
 
     try {
       if (editing) {
-        const { error } = await supabase
-          .from('special_events')
-          .update(formData)
-          .eq('id', editing);
+        // Update existing
+        const response = await fetch(`/api/events/${editing}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
 
-        if (error) throw error;
+        if (!response.ok) throw new Error('Failed to update event');
         toast.success('Event updated successfully');
       } else {
-        const { error } = await supabase
-          .from('special_events')
-          .insert([formData]);
+        // Create new
+        const response = await fetch('/api/events', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
 
-        if (error) throw error;
+        if (!response.ok) throw new Error('Failed to create event');
         toast.success('Event created successfully');
       }
 
@@ -71,12 +89,11 @@ export default function ManageEvents() {
     if (!confirm('Are you sure you want to delete this event?')) return;
 
     try {
-      const { error } = await supabase
-        .from('special_events')
-        .delete()
-        .eq('id', id);
+      const response = await fetch(`/api/events/${id}`, {
+        method: 'DELETE',
+      });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error('Failed to delete event');
       toast.success('Event deleted');
       fetchEvents();
     } catch (error) {
@@ -90,12 +107,12 @@ export default function ManageEvents() {
     setFormData({
       title: event.title,
       description: event.description,
-      event_date: event.event_date,
-      start_time: event.start_time,
-      end_time: event.end_time || '',
+      eventDate: event.eventDate,
+      startTime: event.startTime,
+      endTime: event.endTime || '',
       location: event.location || '',
-      image_url: event.image_url || '',
-      is_published: event.is_published,
+      imageUrl: event.imageUrl || '',
+      isPublished: event.isPublished,
     });
   }
 
@@ -104,12 +121,12 @@ export default function ManageEvents() {
     setFormData({
       title: '',
       description: '',
-      event_date: '',
-      start_time: '',
-      end_time: '',
+      eventDate: '',
+      startTime: '',
+      endTime: '',
       location: '',
-      image_url: '',
-      is_published: true,
+      imageUrl: '',
+      isPublished: true,
     });
   }
 
@@ -154,8 +171,8 @@ export default function ManageEvents() {
               <input
                 type="date"
                 required
-                value={formData.event_date}
-                onChange={(e) => setFormData({ ...formData, event_date: e.target.value })}
+                value={formData.eventDate}
+                onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -165,8 +182,8 @@ export default function ManageEvents() {
               <input
                 type="time"
                 required
-                value={formData.start_time}
-                onChange={(e) => setFormData({ ...formData, start_time: e.target.value })}
+                value={formData.startTime}
+                onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -175,8 +192,8 @@ export default function ManageEvents() {
               <label className="block text-sm font-medium text-gray-700 mb-2">End Time</label>
               <input
                 type="time"
-                value={formData.end_time}
-                onChange={(e) => setFormData({ ...formData, end_time: e.target.value })}
+                value={formData.endTime}
+                onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -197,8 +214,8 @@ export default function ManageEvents() {
             <label className="block text-sm font-medium text-gray-700 mb-2">Image URL (optional)</label>
             <input
               type="text"
-              value={formData.image_url}
-              onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+              value={formData.imageUrl}
+              onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               placeholder="https://..."
             />
@@ -207,8 +224,8 @@ export default function ManageEvents() {
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
-              checked={formData.is_published}
-              onChange={(e) => setFormData({ ...formData, is_published: e.target.checked })}
+              checked={formData.isPublished}
+              onChange={(e) => setFormData({ ...formData, isPublished: e.target.checked })}
               className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
             />
             <span className="text-sm text-gray-700">Published</span>
@@ -243,7 +260,7 @@ export default function ManageEvents() {
             <div className="flex justify-between items-start mb-2">
               <div>
                 <h4 className="font-semibold text-gray-900">{event.title}</h4>
-                {!event.is_published && (
+                {!event.isPublished && (
                   <span className="text-xs px-2 py-1 bg-gray-200 text-gray-600 rounded">Draft</span>
                 )}
               </div>
@@ -264,7 +281,7 @@ export default function ManageEvents() {
             </div>
             <p className="text-sm text-gray-600 mb-2">{event.description}</p>
             <p className="text-sm text-gray-500">
-              {new Date(event.event_date).toLocaleDateString()} at {event.start_time}
+              {new Date(event.eventDate).toLocaleDateString()} at {event.startTime}
             </p>
             {event.location && (
               <p className="text-sm text-gray-500">{event.location}</p>

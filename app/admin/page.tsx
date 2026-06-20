@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import { Lock, Mail } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
@@ -19,15 +18,21 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
 
-      if (error) throw error;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
 
       toast.success('Login successful!');
       router.push('/admin/dashboard');
+      router.refresh();
     } catch (error: any) {
       console.error('Login error:', error);
       toast.error(error.message || 'Invalid login credentials');

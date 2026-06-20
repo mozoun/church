@@ -1,8 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase, type Schedule } from '@/lib/supabase';
 import { Clock, MapPin } from 'lucide-react';
+
+interface Schedule {
+  id: string;
+  dayOfWeek: string;
+  serviceName: string;
+  startTime: string;
+  endTime: string;
+  description: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export default function ScheduleTab() {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -14,13 +25,9 @@ export default function ScheduleTab() {
 
   async function fetchSchedules() {
     try {
-      const { data, error } = await supabase
-        .from('schedules')
-        .select('*')
-        .eq('is_active', true)
-        .order('day_of_week');
-
-      if (error) throw error;
+      const response = await fetch('/api/schedules');
+      if (!response.ok) throw new Error('Failed to fetch schedules');
+      const data = await response.json();
       setSchedules(data || []);
     } catch (error) {
       console.error('Error fetching schedules:', error);
@@ -31,7 +38,7 @@ export default function ScheduleTab() {
 
   const dayOrder = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const sortedSchedules = schedules.sort((a, b) =>
-    dayOrder.indexOf(a.day_of_week) - dayOrder.indexOf(b.day_of_week)
+    dayOrder.indexOf(a.dayOfWeek) - dayOrder.indexOf(b.dayOfWeek)
   );
 
   if (loading) {
@@ -54,19 +61,19 @@ export default function ScheduleTab() {
             className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-100 hover:shadow-lg transition-shadow"
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-blue-900">{schedule.day_of_week}</h3>
+              <h3 className="text-xl font-bold text-blue-900">{schedule.dayOfWeek}</h3>
               <Clock className="w-5 h-5 text-blue-600" />
             </div>
 
             <h4 className="text-lg font-semibold text-gray-900 mb-3">
-              {schedule.service_name}
+              {schedule.serviceName}
             </h4>
 
             <div className="space-y-2">
               <div className="flex items-center text-gray-700">
                 <Clock className="w-4 h-4 mr-2 text-blue-600" />
                 <span className="text-sm">
-                  {schedule.start_time} - {schedule.end_time}
+                  {schedule.startTime} - {schedule.endTime}
                 </span>
               </div>
 

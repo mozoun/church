@@ -1,9 +1,22 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase, type SpecialEvent } from '@/lib/supabase';
 import { Calendar, Clock, MapPin, Sparkles } from 'lucide-react';
 import Image from 'next/image';
+
+interface SpecialEvent {
+  id: string;
+  title: string;
+  description: string;
+  eventDate: string;
+  startTime: string;
+  endTime: string | null;
+  location: string | null;
+  imageUrl: string | null;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export default function EventsTab() {
   const [events, setEvents] = useState<SpecialEvent[]>([]);
@@ -15,14 +28,12 @@ export default function EventsTab() {
 
   async function fetchEvents() {
     try {
-      const { data, error } = await supabase
-        .from('special_events')
-        .select('*')
-        .eq('is_published', true)
-        .gte('event_date', new Date().toISOString().split('T')[0])
-        .order('event_date', { ascending: true });
-
-      if (error) throw error;
+      const response = await fetch('/api/events');
+      if (!response.ok) throw new Error('Failed to fetch events');
+      let data = await response.json();
+      // Filter future events on client side
+      const today = new Date().toISOString().split('T')[0];
+      data = data.filter((event: SpecialEvent) => event.eventDate >= today);
       setEvents(data || []);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -67,10 +78,10 @@ export default function EventsTab() {
           >
             <div className="grid md:grid-cols-3 gap-6">
               {/* Event Image */}
-              {event.image_url && (
+              {event.imageUrl && (
                 <div className="relative h-64 md:h-auto">
                   <Image
-                    src={event.image_url}
+                    src={event.imageUrl}
                     alt={event.title}
                     fill
                     className="object-cover"
@@ -79,7 +90,7 @@ export default function EventsTab() {
               )}
 
               {/* Event Details */}
-              <div className={`p-6 ${event.image_url ? 'md:col-span-2' : 'md:col-span-3'}`}>
+              <div className={`p-6 ${event.imageUrl ? 'md:col-span-2' : 'md:col-span-3'}`}>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">
                   {event.title}
                 </h3>
@@ -91,14 +102,14 @@ export default function EventsTab() {
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-gray-700">
                     <Calendar className="w-5 h-5 text-purple-600" />
-                    <span className="font-medium">{formatDate(event.event_date)}</span>
+                    <span className="font-medium">{formatDate(event.eventDate)}</span>
                   </div>
 
                   <div className="flex items-center gap-3 text-gray-700">
                     <Clock className="w-5 h-5 text-purple-600" />
                     <span>
-                      {event.start_time}
-                      {event.end_time && ` - ${event.end_time}`}
+                      {event.startTime}
+                      {event.endTime && ` - ${event.endTime}`}
                     </span>
                   </div>
 

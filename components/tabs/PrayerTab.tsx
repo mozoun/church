@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
 import { Heart, Send, CheckCircle } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -31,30 +30,22 @@ export default function PrayerTab() {
     setLoading(true);
 
     try {
-      // Insert appointment into database
-      const { error: dbError } = await supabase.from('appointments').insert([
-        {
+      // Submit appointment via API (handles both database and email)
+      const response = await fetch('/api/appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           name: formData.name,
           email: formData.email,
           subject: formData.subject,
           preferred_date: formData.preferred_date.toISOString().split('T')[0],
           preferred_time: formData.preferred_time,
           message: formData.message,
-          status: 'pending',
-        },
-      ]);
-
-      if (dbError) throw dbError;
-
-      // Send email notification to pastor
-      const emailResponse = await fetch('/api/send-appointment-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        }),
       });
 
-      if (!emailResponse.ok) {
-        console.error('Email notification failed');
+      if (!response.ok) {
+        throw new Error('Failed to submit appointment');
       }
 
       setSubmitted(true);

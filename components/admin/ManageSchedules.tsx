@@ -1,21 +1,32 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase, type Schedule } from '@/lib/supabase';
-import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
+import { Edit2, Trash2, Save, X } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+interface Schedule {
+  id: string;
+  dayOfWeek: string;
+  serviceName: string;
+  startTime: string;
+  endTime: string;
+  description: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export default function ManageSchedules() {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    day_of_week: 'Sunday',
-    service_name: '',
-    start_time: '',
-    end_time: '',
+    dayOfWeek: 'Sunday',
+    serviceName: '',
+    startTime: '',
+    endTime: '',
     description: '',
-    is_active: true,
+    isActive: true,
   });
 
   useEffect(() => {
@@ -24,12 +35,9 @@ export default function ManageSchedules() {
 
   async function fetchSchedules() {
     try {
-      const { data, error } = await supabase
-        .from('schedules')
-        .select('*')
-        .order('day_of_week');
-
-      if (error) throw error;
+      const response = await fetch('/api/schedules');
+      if (!response.ok) throw new Error('Failed to fetch schedules');
+      const data = await response.json();
       setSchedules(data || []);
     } catch (error) {
       console.error('Error fetching schedules:', error);
@@ -45,20 +53,23 @@ export default function ManageSchedules() {
     try {
       if (editing) {
         // Update existing
-        const { error } = await supabase
-          .from('schedules')
-          .update(formData)
-          .eq('id', editing);
+        const response = await fetch(`/api/schedules/${editing}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
 
-        if (error) throw error;
+        if (!response.ok) throw new Error('Failed to update schedule');
         toast.success('Schedule updated successfully');
       } else {
         // Create new
-        const { error } = await supabase
-          .from('schedules')
-          .insert([formData]);
+        const response = await fetch('/api/schedules', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
 
-        if (error) throw error;
+        if (!response.ok) throw new Error('Failed to create schedule');
         toast.success('Schedule created successfully');
       }
 
@@ -74,12 +85,11 @@ export default function ManageSchedules() {
     if (!confirm('Are you sure you want to delete this schedule?')) return;
 
     try {
-      const { error } = await supabase
-        .from('schedules')
-        .delete()
-        .eq('id', id);
+      const response = await fetch(`/api/schedules/${id}`, {
+        method: 'DELETE',
+      });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error('Failed to delete schedule');
       toast.success('Schedule deleted');
       fetchSchedules();
     } catch (error) {
@@ -91,24 +101,24 @@ export default function ManageSchedules() {
   function handleEdit(schedule: Schedule) {
     setEditing(schedule.id);
     setFormData({
-      day_of_week: schedule.day_of_week,
-      service_name: schedule.service_name,
-      start_time: schedule.start_time,
-      end_time: schedule.end_time,
+      dayOfWeek: schedule.dayOfWeek,
+      serviceName: schedule.serviceName,
+      startTime: schedule.startTime,
+      endTime: schedule.endTime,
       description: schedule.description || '',
-      is_active: schedule.is_active,
+      isActive: schedule.isActive,
     });
   }
 
   function resetForm() {
     setEditing(null);
     setFormData({
-      day_of_week: 'Sunday',
-      service_name: '',
-      start_time: '',
-      end_time: '',
+      dayOfWeek: 'Sunday',
+      serviceName: '',
+      startTime: '',
+      endTime: '',
       description: '',
-      is_active: true,
+      isActive: true,
     });
   }
 
@@ -129,8 +139,8 @@ export default function ManageSchedules() {
             <label className="block text-sm font-medium text-gray-700 mb-2">Day of Week</label>
             <select
               required
-              value={formData.day_of_week}
-              onChange={(e) => setFormData({ ...formData, day_of_week: e.target.value })}
+              value={formData.dayOfWeek}
+              onChange={(e) => setFormData({ ...formData, dayOfWeek: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
               {daysOfWeek.map((day) => (
@@ -144,8 +154,8 @@ export default function ManageSchedules() {
             <input
               type="text"
               required
-              value={formData.service_name}
-              onChange={(e) => setFormData({ ...formData, service_name: e.target.value })}
+              value={formData.serviceName}
+              onChange={(e) => setFormData({ ...formData, serviceName: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               placeholder="Morning Worship"
             />
@@ -156,8 +166,8 @@ export default function ManageSchedules() {
             <input
               type="time"
               required
-              value={formData.start_time}
-              onChange={(e) => setFormData({ ...formData, start_time: e.target.value })}
+              value={formData.startTime}
+              onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -167,8 +177,8 @@ export default function ManageSchedules() {
             <input
               type="time"
               required
-              value={formData.end_time}
-              onChange={(e) => setFormData({ ...formData, end_time: e.target.value })}
+              value={formData.endTime}
+              onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -189,8 +199,8 @@ export default function ManageSchedules() {
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
-              checked={formData.is_active}
-              onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+              checked={formData.isActive}
+              onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
               className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
             />
             <span className="text-sm text-gray-700">Active</span>
@@ -224,13 +234,13 @@ export default function ManageSchedules() {
           <div key={schedule.id} className="border border-gray-200 rounded-lg p-4 flex justify-between items-start">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="font-bold text-blue-600">{schedule.day_of_week}</span>
-                {!schedule.is_active && (
+                <span className="font-bold text-blue-600">{schedule.dayOfWeek}</span>
+                {!schedule.isActive && (
                   <span className="text-xs px-2 py-1 bg-gray-200 text-gray-600 rounded">Inactive</span>
                 )}
               </div>
-              <h4 className="font-semibold text-gray-900">{schedule.service_name}</h4>
-              <p className="text-sm text-gray-600">{schedule.start_time} - {schedule.end_time}</p>
+              <h4 className="font-semibold text-gray-900">{schedule.serviceName}</h4>
+              <p className="text-sm text-gray-600">{schedule.startTime} - {schedule.endTime}</p>
               {schedule.description && (
                 <p className="text-sm text-gray-500 mt-1">{schedule.description}</p>
               )}

@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Schedule {
+  id          String   @id @default(uuid())
+  dayOfWeek   String   @map("day_of_week")
+  serviceName String   @map("service_name")
+  startTime   String   @map("start_time")
+  endTime     String   @map("end_time")
+  description String?
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("schedules")
+}
+
+model SpecialEvent {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  eventDate   String   @map("event_date")
+  startTime   String   @map("start_time")
+  endTime     String?  @map("end_time")
+  location    String?
+  imageUrl    String?  @map("image_url")
+  isPublished Boolean  @default(true) @map("is_published")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("special_events")
+}
+
+model Appointment {
+  id            String   @id @default(uuid())
+  name          String
+  email         String
+  subject       String
+  preferredDate String   @map("preferred_date")
+  preferredTime String   @map("preferred_time")
+  message       String?
+  status        String   @default("pending")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("appointments")
+}
+
+model GalleryImage {
+  id           String   @id @default(uuid())
+  title        String
+  description  String?
+  imageUrl     String   @map("image_url")
+  displayOrder Int      @default(0) @map("display_order")
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("gallery_images")
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("admins")
+}

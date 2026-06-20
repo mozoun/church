@@ -1,9 +1,21 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase, type Appointment } from '@/lib/supabase';
 import { CheckCircle, XCircle, Clock, Mail, User, Calendar } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+interface Appointment {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string | null;
+  preferredDate: string;
+  preferredTime: string;
+  status: 'pending' | 'confirmed' | 'cancelled';
+  createdAt: string;
+  updatedAt: string;
+}
 
 export default function ViewAppointments() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -15,12 +27,9 @@ export default function ViewAppointments() {
 
   async function fetchAppointments() {
     try {
-      const { data, error } = await supabase
-        .from('appointments')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
+      const response = await fetch('/api/appointments');
+      if (!response.ok) throw new Error('Failed to fetch appointments');
+      const data = await response.json();
       setAppointments(data || []);
     } catch (error) {
       console.error('Error fetching appointments:', error);
@@ -32,12 +41,13 @@ export default function ViewAppointments() {
 
   async function updateStatus(id: string, status: 'confirmed' | 'cancelled') {
     try {
-      const { error } = await supabase
-        .from('appointments')
-        .update({ status })
-        .eq('id', id);
+      const response = await fetch(`/api/appointments/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error('Failed to update appointment');
       toast.success(`Appointment ${status}`);
       fetchAppointments();
     } catch (error) {
@@ -89,7 +99,7 @@ export default function ViewAppointments() {
                   {getStatusBadge(appointment.status)}
                 </h4>
                 <p className="text-sm text-gray-500">
-                  Submitted on {new Date(appointment.created_at).toLocaleDateString()}
+                  Submitted on {new Date(appointment.createdAt).toLocaleDateString()}
                 </p>
               </div>
             </div>
@@ -110,7 +120,7 @@ export default function ViewAppointments() {
               <div className="flex items-center gap-2 text-gray-700">
                 <Calendar className="w-4 h-4 text-gray-400" />
                 <span className="text-sm">
-                  {new Date(appointment.preferred_date).toLocaleDateString()} at {appointment.preferred_time}
+                  {new Date(appointment.preferredDate).toLocaleDateString()} at {appointment.preferredTime}
                 </span>
               </div>
             </div>
