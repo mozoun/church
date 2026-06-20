@@ -4,7 +4,7 @@ import { getSession } from '@/lib/auth';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Check authentication
@@ -16,10 +16,11 @@ export async function PUT(
       );
     }
 
+    const { id } = await params;
     const body = await request.json();
 
     const appointment = await prisma.appointment.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         status: body.status,
       },
