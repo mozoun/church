@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
 
     const data = await resend.emails.send({
       from: 'Rivers of Living Waters Ministry <noreply@riversoflivingwaterchurch.org>',
-      to: [process.env.PASTOR_EMAIL || 'pastor@riversoflivingwaterchurch.org'],
+      to: ['rexoquendo@gmail.com'],
       replyTo: email,
       subject: `New Prayer Request: ${subject}`,
       html: emailHtml,
