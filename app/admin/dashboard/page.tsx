@@ -2,16 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Calendar, Sparkles, ImageIcon, Heart, LogOut, Loader2 } from 'lucide-react';
+import { Calendar, Sparkles, ImageIcon, Heart, LogOut, Loader2, Link2 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import ManageSchedules from '@/components/admin/ManageSchedules';
 import ManageEvents from '@/components/admin/ManageEvents';
 import ManageGallery from '@/components/admin/ManageGallery';
 import ViewAppointments from '@/components/admin/ViewAppointments';
+import FacebookConnect from '@/components/admin/FacebookConnect';
 
 export const dynamic = 'force-dynamic';
 
-type TabType = 'schedules' | 'events' | 'gallery' | 'appointments';
+type TabType = 'schedules' | 'events' | 'gallery' | 'appointments' | 'facebook';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<TabType>('schedules');
@@ -58,6 +59,7 @@ export default function AdminDashboard() {
     { id: 'events' as TabType, label: 'Special Events', icon: Sparkles },
     { id: 'gallery' as TabType, label: 'Gallery', icon: ImageIcon },
     { id: 'appointments' as TabType, label: 'Appointments', icon: Heart },
+    { id: 'facebook' as TabType, label: 'Facebook', icon: Link2 },
   ];
 
   if (loading) {
@@ -135,6 +137,7 @@ export default function AdminDashboard() {
           {activeTab === 'events' && <ManageEvents />}
           {activeTab === 'gallery' && <ManageGallery />}
           {activeTab === 'appointments' && <ViewAppointments />}
+          {activeTab === 'facebook' && <FacebookConnect />}
         </div>
       </main>
     </div>

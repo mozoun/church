@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { getSession } from '@/lib/auth';
+import { postPhotoToPage } from '@/lib/facebook';
 
 export async function GET(request: NextRequest) {
   try {
@@ -44,7 +45,15 @@ export async function POST(request: Request) {
       },
     });
 
-    return NextResponse.json(image, { status: 201 });
+    let facebook: { posted: boolean; reason?: string } = { posted: false };
+    try {
+      const caption = body.description ? `${body.title} - ${body.description}` : body.title;
+      facebook = await postPhotoToPage(body.imageUrl, caption);
+    } catch (fbError) {
+      console.error('Facebook post failed:', fbError);
+    }
+
+    return NextResponse.json({ ...image, facebook }, { status: 201 });
   } catch (error) {
     console.error('Error creating gallery image:', error);
     return NextResponse.json(

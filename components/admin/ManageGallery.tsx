@@ -100,7 +100,13 @@ export default function ManageGallery() {
           body: JSON.stringify({ ...formData, imageUrl: pendingImage }),
         });
         if (!response.ok) throw new Error('Failed to upload image');
+        const created = await response.json();
         toast.success('Image uploaded successfully');
+        if (created.facebook?.posted) {
+          toast.success('Also posted to your Facebook Page');
+        } else if (created.facebook?.reason && created.facebook.reason !== 'not_connected') {
+          toast.error('Image saved, but posting to Facebook failed');
+        }
       }
 
       resetForm();
