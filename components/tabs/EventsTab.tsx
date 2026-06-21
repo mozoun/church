@@ -134,12 +134,26 @@ export default function EventsTab() {
       </div>
 
       {events.length === 0 && (
-        <div className="text-center py-12 bg-gray-50 rounded-xl">
-          <Sparkles className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-500">No upcoming special events at this time.</p>
-          <p className="text-sm text-gray-400 mt-2">Check back soon for announcements!</p>
+        <div className="text-center py-12 bg-gradient-to-br from-purple-50 to-violet-50 rounded-2xl border border-purple-200">
+          <Sparkles className="w-16 h-16 text-purple-300 mx-auto mb-4" />
+          <p className="text-purple-600" style={{fontFamily: 'Crimson Pro, Georgia, serif'}}>No upcoming special events at this time.</p>
+          <p className="text-sm text-purple-400 mt-2" style={{fontFamily: 'Crimson Pro, Georgia, serif'}}>Check back soon for announcements!</p>
         </div>
       )}
+
+      {/* Bible Verse */}
+      <FadeIn delay={0.5}>
+        <div className="mt-12 bg-gradient-to-br from-amber-50 to-purple-50 rounded-2xl p-6 border-2 border-amber-200/50 shadow-lg">
+          <div className="text-center">
+            <p className="text-lg italic mb-2" style={{fontFamily: 'Crimson Pro, Georgia, serif', color: '#7C3AED'}}>
+              "Come to me, all you who are weary and burdened, and I will give you rest."
+            </p>
+            <p className="text-sm font-semibold" style={{fontFamily: 'Crimson Pro, Georgia, serif', color: '#A16207'}}>
+              — MATTHEW 11:28
+            </p>
+          </div>
+        </div>
+      </FadeIn>
     </div>
   );
 }

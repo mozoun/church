@@ -69,7 +69,7 @@ export default function AdminLoginPage() {
         </div>
 
         {/* Login Form */}
-        <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-10 border border-purple-200/30">
+        <div className="bg-gradient-to-br from-purple-50/98 via-lavender-50/98 to-white/98 backdrop-blur-sm rounded-3xl shadow-2xl p-10 border border-purple-200/30">
           <h2 className="text-2xl font-bold mb-8" style={{fontFamily: 'Cormorant Garamond, Georgia, serif', color: '#4C1D95'}}>
             Sign In
           </h2>

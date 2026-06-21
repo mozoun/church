@@ -97,7 +97,7 @@ export default function AdminDashboard() {
       </header>
 
       {/* Tab Navigation with Spiritual Theme */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-purple-200/50 shadow-lg sticky top-0 z-40">
+      <div className="bg-gradient-to-r from-purple-50/95 via-lavender-50/95 to-violet-50/95 backdrop-blur-sm border-b border-purple-200/50 shadow-lg sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-2 overflow-x-auto py-4 scrollbar-hide">
             {tabs.map((tab) => {
@@ -130,7 +130,7 @@ export default function AdminDashboard() {
 
       {/* Content with Beautiful Card */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl shadow-purple-900/10 p-8 md:p-10 border border-purple-200/30">
+        <div className="bg-gradient-to-br from-purple-50/95 via-lavender-50/95 to-violet-50/95 backdrop-blur-sm rounded-3xl shadow-2xl shadow-purple-900/10 p-8 md:p-10 border border-purple-200/30">
           {activeTab === 'schedules' && <ManageSchedules />}
           {activeTab === 'events' && <ManageEvents />}
           {activeTab === 'gallery' && <ManageGallery />}

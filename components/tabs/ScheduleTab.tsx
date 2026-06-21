@@ -111,8 +111,22 @@ export default function ScheduleTab() {
         </div>
       )}
 
+      {/* Bible Verse */}
       <FadeIn delay={0.5}>
-        <div className="mt-12 bg-gradient-to-br from-purple-50 to-violet-50 rounded-2xl p-6 border border-purple-200">
+        <div className="mt-12 bg-gradient-to-br from-amber-50 to-purple-50 rounded-2xl p-6 border-2 border-amber-200/50 shadow-lg">
+          <div className="text-center">
+            <p className="text-lg italic mb-2" style={{fontFamily: 'Crimson Pro, Georgia, serif', color: '#7C3AED'}}>
+              "For where two or three gather in my name, there am I with them."
+            </p>
+            <p className="text-sm font-semibold" style={{fontFamily: 'Crimson Pro, Georgia, serif', color: '#A16207'}}>
+              — MATTHEW 18:20
+            </p>
+          </div>
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={0.6}>
+        <div className="mt-8 bg-gradient-to-br from-purple-50 to-violet-50 rounded-2xl p-6 border border-purple-200">
           <h3 className="text-xl font-semibold mb-2" style={{fontFamily: 'Cormorant Garamond, Georgia, serif', color: '#7C3AED'}}>
             Location
           </h3>

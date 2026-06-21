@@ -46,15 +46,25 @@ export default function AboutPage() {
               <div className="h-px w-12 bg-gradient-to-l from-transparent to-amber-400/60" />
             </div>
             {/* Description */}
-            <p className="text-lg md:text-xl text-purple-100 max-w-3xl mx-auto leading-relaxed" style={{fontFamily: 'Crimson Pro, Georgia, serif'}}>
+            <p className="text-lg md:text-xl text-purple-100 max-w-3xl mx-auto leading-relaxed mb-6" style={{fontFamily: 'Crimson Pro, Georgia, serif'}}>
               Welcome to our community! We are a vibrant church family dedicated to worship, fellowship, and spreading the love of Christ.
             </p>
+
+            {/* Inspirational Verse */}
+            <div className="mt-8 max-w-2xl mx-auto bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-amber-300/30">
+              <p className="text-lg italic text-amber-100 mb-2" style={{fontFamily: 'Crimson Pro, Georgia, serif'}}>
+                "I am the way and the truth and the life. No one comes to the Father except through me."
+              </p>
+              <p className="text-sm font-semibold text-amber-300" style={{fontFamily: 'Crimson Pro, Georgia, serif'}}>
+                — JOHN 14:6
+              </p>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Tab Navigation with Spiritual Theme */}
-      <div className="sticky top-0 z-40 bg-white/90 backdrop-blur-md shadow-lg border-b border-purple-200/50">
+      <div className="sticky top-0 z-40 bg-gradient-to-r from-purple-50/95 via-lavender-50/95 to-violet-50/95 backdrop-blur-md shadow-lg border-b border-purple-200/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-2 overflow-x-auto py-4 scrollbar-hide">
             {tabs.map((tab) => {
@@ -87,7 +97,7 @@ export default function AboutPage() {
 
       {/* Tab Content with Beautiful Card */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl shadow-purple-900/10 p-8 md:p-12 border border-purple-200/30">
+        <div className="bg-gradient-to-br from-purple-50/95 via-lavender-50/95 to-violet-50/95 backdrop-blur-sm rounded-3xl shadow-2xl shadow-purple-900/10 p-8 md:p-12 border border-purple-200/30">
           {activeTab === 'schedule' && <ScheduleTab />}
           {activeTab === 'events' && <EventsTab />}
           {activeTab === 'prayer' && <PrayerTab />}

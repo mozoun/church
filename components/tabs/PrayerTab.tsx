@@ -132,7 +132,7 @@ export default function PrayerTab() {
               required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border-2 border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
               placeholder="John Doe"
             />
           </div>
@@ -148,7 +148,7 @@ export default function PrayerTab() {
               required
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border-2 border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
               placeholder="john@example.com"
             />
           </div>
@@ -180,7 +180,7 @@ export default function PrayerTab() {
               selected={formData.preferred_date}
               onChange={(date: Date | null) => setFormData({ ...formData, preferred_date: date || new Date() })}
               minDate={new Date()}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border-2 border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
               dateFormat="MMMM d, yyyy"
             />
           </div>
@@ -195,7 +195,7 @@ export default function PrayerTab() {
               required
               value={formData.preferred_time}
               onChange={(e) => setFormData({ ...formData, preferred_time: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border-2 border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
             >
               <option value="">Select a time</option>
               {timeSlots.map((time) => (
@@ -244,6 +244,20 @@ export default function PrayerTab() {
               )}
             </div>
           </button>
+        </FadeIn>
+
+        {/* Bible Verse */}
+        <FadeIn delay={0.5}>
+          <div className="mt-8 bg-gradient-to-br from-amber-50 to-purple-50 rounded-2xl p-6 border-2 border-amber-200/50 shadow-lg">
+            <div className="text-center">
+              <p className="text-lg italic mb-2" style={{fontFamily: 'Crimson Pro, Georgia, serif', color: '#7C3AED'}}>
+                "Ask and it will be given to you; seek and you will find; knock and the door will be opened to you."
+              </p>
+              <p className="text-sm font-semibold" style={{fontFamily: 'Crimson Pro, Georgia, serif', color: '#A16207'}}>
+                — MATTHEW 7:7
+              </p>
+            </div>
+          </div>
         </FadeIn>
       </form>
     </div>

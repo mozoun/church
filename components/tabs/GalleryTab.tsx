@@ -151,6 +151,20 @@ export default function GalleryTab() {
         isOpen={lightboxOpen}
         onClose={closeLightbox}
       />
+
+      {/* Bible Verse */}
+      <FadeIn delay={0.5}>
+        <div className="mt-12 bg-gradient-to-br from-amber-50 to-purple-50 rounded-2xl p-6 border-2 border-amber-200/50 shadow-lg">
+          <div className="text-center">
+            <p className="text-lg italic mb-2" style={{fontFamily: 'Crimson Pro, Georgia, serif', color: '#7C3AED'}}>
+              "Every good and perfect gift is from above, coming down from the Father of the heavenly lights."
+            </p>
+            <p className="text-sm font-semibold" style={{fontFamily: 'Crimson Pro, Georgia, serif', color: '#A16207'}}>
+              — JAMES 1:17
+            </p>
+          </div>
+        </div>
+      </FadeIn>
     </div>
   );
 }
