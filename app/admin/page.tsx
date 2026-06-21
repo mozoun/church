@@ -42,38 +42,60 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-blue-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-violet-900 to-purple-950 flex items-center justify-center p-4 relative overflow-hidden">
       <Toaster position="top-center" />
 
-      <div className="max-w-md w-full">
+      {/* Decorative Background Elements */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-600/10 via-transparent to-transparent" />
+
+      <div className="max-w-md w-full relative z-10">
         {/* Logo/Header */}
-        <div className="text-center mb-8">
-          <div className="inline-block p-4 bg-white/10 backdrop-blur-sm rounded-full mb-4">
-            <div className="text-5xl text-white">✟</div>
+        <div className="text-center mb-10">
+          <div className="inline-block p-5 bg-gradient-to-br from-amber-400/20 to-purple-600/20 backdrop-blur-md rounded-full mb-6 border-2 border-amber-300/30 shadow-2xl shadow-amber-500/20">
+            <div className="text-6xl text-amber-200" style={{textShadow: '0 0 25px rgba(251, 191, 36, 0.5)'}}>✟</div>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Admin Panel</h1>
-          <p className="text-blue-200">Rivers of Living Waters Ministry</p>
+          <h1 className="text-4xl font-bold text-white mb-3" style={{fontFamily: 'Cormorant Garamond, Georgia, serif', textShadow: '0 2px 15px rgba(0, 0, 0, 0.4)'}}>
+            Admin Panel
+          </h1>
+          {/* Decorative Divider */}
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="h-px w-12 bg-gradient-to-r from-transparent to-amber-400/50" />
+            <div className="w-1.5 h-1.5 rounded-full bg-amber-400/70" />
+            <div className="h-px w-12 bg-gradient-to-l from-transparent to-amber-400/50" />
+          </div>
+          <p className="text-purple-200 text-lg" style={{fontFamily: 'Crimson Pro, Georgia, serif'}}>
+            Rivers of Living Waters Ministry
+          </p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Sign In</h2>
+        <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-10 border border-purple-200/30">
+          <h2 className="text-2xl font-bold mb-8" style={{fontFamily: 'Cormorant Garamond, Georgia, serif', color: '#4C1D95'}}>
+            Sign In
+          </h2>
 
           <form onSubmit={handleLogin} className="space-y-6">
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium mb-2" style={{fontFamily: 'Crimson Pro, Georgia, serif', color: '#4C1D95'}}>
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{color: '#A78BFA'}} />
                 <input
                   type="email"
                   id="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-11 pr-4 py-3.5 border-2 rounded-xl transition-all duration-200"
+                  style={{
+                    borderColor: '#DDD6FE',
+                    fontFamily: 'Crimson Pro, Georgia, serif',
+                    color: '#4C1D95'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#7C3AED'}
+                  onBlur={(e) => e.target.style.borderColor = '#DDD6FE'}
                   placeholder="admin@example.com"
                 />
               </div>
@@ -81,18 +103,25 @@ export default function AdminLoginPage() {
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium mb-2" style={{fontFamily: 'Crimson Pro, Georgia, serif', color: '#4C1D95'}}>
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{color: '#A78BFA'}} />
                 <input
                   type="password"
                   id="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-11 pr-4 py-3.5 border-2 rounded-xl transition-all duration-200"
+                  style={{
+                    borderColor: '#DDD6FE',
+                    fontFamily: 'Crimson Pro, Georgia, serif',
+                    color: '#4C1D95'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#7C3AED'}
+                  onBlur={(e) => e.target.style.borderColor = '#DDD6FE'}
                   placeholder="••••••••"
                 />
               </div>
@@ -102,21 +131,24 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group relative w-full mt-8"
             >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  Signing in...
-                </span>
-              ) : (
-                'Sign In'
-              )}
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300" />
+              <div className="relative w-full py-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl font-semibold text-lg shadow-xl transform transition-all duration-300 group-hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed" style={{fontFamily: 'Crimson Pro, Georgia, serif'}}>
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    Signing in...
+                  </span>
+                ) : (
+                  'Sign In'
+                )}
+              </div>
             </button>
           </form>
 
           {/* Info */}
-          <div className="mt-6 text-center text-sm text-gray-500">
+          <div className="mt-8 text-center text-sm" style={{color: '#A78BFA', fontFamily: 'Crimson Pro, Georgia, serif'}}>
             <p>Protected admin area</p>
           </div>
         </div>

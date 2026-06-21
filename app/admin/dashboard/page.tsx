@@ -69,20 +69,25 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{backgroundColor: '#FAF5FF'}}>
       <Toaster position="top-center" />
 
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      {/* Header with Spiritual Theme */}
+      <header className="bg-gradient-to-r from-purple-900 via-violet-800 to-purple-900 shadow-2xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-              <p className="text-sm text-gray-500">Rivers of Living Waters Ministry</p>
+              <h1 className="text-3xl font-bold text-white" style={{fontFamily: 'Cormorant Garamond, Georgia, serif'}}>
+                Admin Dashboard
+              </h1>
+              <p className="text-purple-200 mt-1" style={{fontFamily: 'Crimson Pro, Georgia, serif'}}>
+                Rivers of Living Waters Ministry
+              </p>
             </div>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-5 py-2.5 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl transition-all duration-300 border border-white/20"
+              style={{fontFamily: 'Crimson Pro, Georgia, serif'}}
             >
               <LogOut className="w-5 h-5" />
               Logout
@@ -91,10 +96,10 @@ export default function AdminDashboard() {
         </div>
       </header>
 
-      {/* Tab Navigation */}
-      <div className="bg-white border-b border-gray-200">
+      {/* Tab Navigation with Spiritual Theme */}
+      <div className="bg-white/80 backdrop-blur-sm border-b border-purple-200/50 shadow-lg sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex space-x-1 overflow-x-auto py-4">
+          <nav className="flex space-x-2 overflow-x-auto py-4 scrollbar-hide">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
@@ -102,16 +107,20 @@ export default function AdminDashboard() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`
-                    flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all whitespace-nowrap
+                    group relative flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 whitespace-nowrap
                     ${
                       activeTab === tab.id
-                        ? 'bg-blue-600 text-white shadow-md'
-                        : 'text-gray-600 hover:bg-gray-100'
+                        ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg shadow-purple-500/40 scale-105'
+                        : 'hover:bg-purple-100/70 hover:scale-102'
                     }
                   `}
+                  style={{fontFamily: 'Crimson Pro, Georgia, serif', color: activeTab === tab.id ? 'white' : '#4C1D95'}}
                 >
-                  <Icon className="w-5 h-5" />
-                  {tab.label}
+                  {activeTab === tab.id && (
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-amber-400/20 to-transparent opacity-50" />
+                  )}
+                  <Icon className="w-5 h-5 relative z-10" />
+                  <span className="relative z-10">{tab.label}</span>
                 </button>
               );
             })}
@@ -119,9 +128,9 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-xl shadow-sm p-6">
+      {/* Content with Beautiful Card */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl shadow-purple-900/10 p-8 md:p-10 border border-purple-200/30">
           {activeTab === 'schedules' && <ManageSchedules />}
           {activeTab === 'events' && <ManageEvents />}
           {activeTab === 'gallery' && <ManageGallery />}
