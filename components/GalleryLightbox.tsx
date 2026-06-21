@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 
 interface GalleryImage {
   id: string;
@@ -161,13 +160,10 @@ export default function GalleryLightbox({ images, currentIndex, isOpen, onClose 
             className="relative overflow-hidden rounded-lg transition-transform duration-200"
             style={{ transform: `scale(${zoom})` }}
           >
-            <Image
+            <img
               src={currentImage.url}
               alt={currentImage.caption}
-              width={1200}
-              height={800}
               className="max-h-[80vh] w-auto object-contain"
-              priority
             />
           </div>
 

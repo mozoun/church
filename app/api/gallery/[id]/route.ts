@@ -7,7 +7,6 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Check authentication
     const session = await getSession();
     if (!session.isLoggedIn) {
       return NextResponse.json(
@@ -19,24 +18,28 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
-    const appointment = await prisma.appointment.update({
+    const data: Record<string, unknown> = {
+      title: body.title,
+      description: body.description || null,
+      displayOrder: body.displayOrder ?? 0,
+      isActive: body.isActive ?? true,
+    };
+
+    // Only overwrite the image itself if a new one was provided
+    if (body.imageUrl) {
+      data.imageUrl = body.imageUrl;
+    }
+
+    const image = await prisma.galleryImage.update({
       where: { id },
-      data: {
-        name: body.name,
-        email: body.email,
-        subject: body.subject,
-        preferredDate: body.preferredDate,
-        preferredTime: body.preferredTime,
-        message: body.message,
-        status: body.status,
-      },
+      data,
     });
 
-    return NextResponse.json(appointment);
+    return NextResponse.json(image);
   } catch (error) {
-    console.error('Error updating appointment:', error);
+    console.error('Error updating gallery image:', error);
     return NextResponse.json(
-      { error: 'Failed to update appointment' },
+      { error: 'Failed to update gallery image' },
       { status: 500 }
     );
   }
@@ -57,15 +60,15 @@ export async function DELETE(
 
     const { id } = await params;
 
-    await prisma.appointment.delete({
+    await prisma.galleryImage.delete({
       where: { id },
     });
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error deleting appointment:', error);
+    console.error('Error deleting gallery image:', error);
     return NextResponse.json(
-      { error: 'Failed to delete appointment' },
+      { error: 'Failed to delete gallery image' },
       { status: 500 }
     );
   }

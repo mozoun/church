@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { getSession } from '@/lib/auth';
+import { sendAppointmentEmail } from '@/lib/email';
 
 export async function GET(request: Request) {
   try {
@@ -45,10 +46,13 @@ export async function POST(request: Request) {
 
     // Send email notification
     try {
-      await fetch('/api/send-appointment-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+      await sendAppointmentEmail({
+        name: body.name,
+        email: body.email,
+        subject: body.subject,
+        preferredDate: body.preferred_date,
+        preferredTime: body.preferred_time,
+        message: body.message,
       });
     } catch (emailError) {
       console.error('Email notification failed:', emailError);
