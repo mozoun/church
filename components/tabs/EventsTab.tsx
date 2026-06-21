@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Calendar, Clock, MapPin, Sparkles } from 'lucide-react';
 import Image from 'next/image';
+import FadeIn from '@/components/animations/FadeIn';
 
 interface SpecialEvent {
   id: string;
@@ -62,20 +63,25 @@ export default function EventsTab() {
 
   return (
     <div>
-      <div className="flex items-center gap-3 mb-8">
-        <Sparkles className="w-8 h-8 text-purple-600" />
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900">Special Events</h2>
-          <p className="text-gray-600">Upcoming celebrations and gatherings</p>
+      <FadeIn>
+        <div className="flex items-center gap-3 mb-8">
+          <Sparkles className="w-8 h-8 text-purple-600" />
+          <div>
+            <h2 className="text-3xl font-bold" style={{fontFamily: 'Cormorant Garamond, Georgia, serif', color: '#4C1D95'}}>
+              Special Events
+            </h2>
+            <p style={{fontFamily: 'Crimson Pro, Georgia, serif', color: '#6B21A8'}}>
+              Upcoming celebrations and gatherings
+            </p>
+          </div>
         </div>
-      </div>
+      </FadeIn>
 
       <div className="space-y-8">
-        {events.map((event) => (
-          <div
-            key={event.id}
-            className="bg-gradient-to-br from-purple-50 via-white to-pink-50 rounded-2xl overflow-hidden border border-purple-100 shadow-md hover:shadow-xl transition-shadow"
-          >
+        {events.map((event, index) => (
+          <FadeIn key={event.id} delay={0.2 + (index * 0.1)} direction="up">
+            <div className="bg-gradient-to-br from-purple-50 via-white to-violet-50 rounded-2xl overflow-hidden border border-purple-200 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.01]"
+            >
             <div className="grid md:grid-cols-3 gap-6">
               {/* Event Image */}
               {event.imageUrl && (
@@ -123,6 +129,7 @@ export default function EventsTab() {
               </div>
             </div>
           </div>
+          </FadeIn>
         ))}
       </div>
 

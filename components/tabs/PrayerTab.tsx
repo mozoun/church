@@ -5,6 +5,7 @@ import { Heart, Send, CheckCircle } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import toast, { Toaster } from 'react-hot-toast';
+import FadeIn from '@/components/animations/FadeIn';
 
 export default function PrayerTab() {
   const [formData, setFormData] = useState({
@@ -70,40 +71,53 @@ export default function PrayerTab() {
 
   if (submitted) {
     return (
-      <div className="text-center py-12">
-        <Toaster position="top-center" />
-        <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-4" />
-        <h3 className="text-2xl font-bold text-gray-900 mb-2">Request Received!</h3>
-        <p className="text-gray-600 mb-6">
-          Thank you for your prayer request. Our pastor will contact you soon.
-        </p>
-        <button
-          onClick={() => setSubmitted(false)}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          Submit Another Request
-        </button>
-      </div>
+      <FadeIn>
+        <div className="text-center py-12">
+          <Toaster position="top-center" />
+          <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-4" />
+          <h3 className="text-2xl font-bold mb-2" style={{fontFamily: 'Cormorant Garamond, Georgia, serif', color: '#4C1D95'}}>
+            Request Received!
+          </h3>
+          <p className="mb-6" style={{fontFamily: 'Crimson Pro, Georgia, serif', color: '#6B21A8'}}>
+            Thank you for your prayer request. Our pastor will contact you soon.
+          </p>
+          <button
+            onClick={() => setSubmitted(false)}
+            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+            style={{fontFamily: 'Crimson Pro, Georgia, serif'}}
+          >
+            Submit Another Request
+          </button>
+        </div>
+      </FadeIn>
     );
   }
 
   return (
     <div>
       <Toaster position="top-center" />
-      <div className="flex items-center gap-3 mb-8">
-        <Heart className="w-8 h-8 text-red-500" />
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900">Prayer Request</h2>
-          <p className="text-gray-600">Schedule a time to meet with our pastor</p>
+      <FadeIn>
+        <div className="flex items-center gap-3 mb-8">
+          <Heart className="w-8 h-8 text-purple-600" />
+          <div>
+            <h2 className="text-3xl font-bold" style={{fontFamily: 'Cormorant Garamond, Georgia, serif', color: '#4C1D95'}}>
+              Prayer Request
+            </h2>
+            <p style={{fontFamily: 'Crimson Pro, Georgia, serif', color: '#6B21A8'}}>
+              Schedule a time to meet with our pastor
+            </p>
+          </div>
         </div>
-      </div>
+      </FadeIn>
 
-      <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-xl p-6 mb-8 border border-red-100">
-        <p className="text-gray-700 leading-relaxed">
-          We believe in the power of prayer. If you need pastoral guidance, prayer support, or just someone to talk to,
-          please fill out this form and our pastor will reach out to schedule a time to meet with you.
-        </p>
-      </div>
+      <FadeIn delay={0.2}>
+        <div className="bg-gradient-to-br from-purple-50 to-violet-50 rounded-2xl p-6 mb-8 border border-purple-200">
+          <p className="leading-relaxed" style={{fontFamily: 'Crimson Pro, Georgia, serif', color: '#4C1D95'}}>
+            We believe in the power of prayer. If you need pastoral guidance, prayer support, or just someone to talk to,
+            please fill out this form and our pastor will reach out to schedule a time to meet with you.
+          </p>
+        </div>
+      </FadeIn>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid md:grid-cols-2 gap-6">
@@ -209,23 +223,28 @@ export default function PrayerTab() {
         </div>
 
         {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full md:w-auto px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-        >
-          {loading ? (
-            <>
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-              Submitting...
-            </>
-          ) : (
-            <>
-              <Send className="w-5 h-5" />
-              Submit Request
-            </>
-          )}
-        </button>
+        <FadeIn delay={0.4}>
+          <button
+            type="submit"
+            disabled={loading}
+            className="group relative w-full md:w-auto"
+          >
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300" />
+            <div className="relative px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl font-semibold shadow-xl transform transition-all duration-300 group-hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2" style={{fontFamily: 'Crimson Pro, Georgia, serif'}}>
+              {loading ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  <Send className="w-5 h-5" />
+                  Submit Request
+                </>
+              )}
+            </div>
+          </button>
+        </FadeIn>
       </form>
     </div>
   );
