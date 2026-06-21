@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import { Calendar, Sparkles, ImageIcon, Heart, LogOut, Loader2 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
@@ -26,14 +25,15 @@ export default function AdminDashboard() {
 
   async function checkAuth() {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const response = await fetch('/api/auth/session');
+      const data = await response.json();
 
-      if (!user) {
+      if (!response.ok || !data.isLoggedIn) {
         router.push('/admin');
         return;
       }
 
-      setUser(user);
+      setUser(data.user);
     } catch (error) {
       console.error('Auth check error:', error);
       router.push('/admin');
@@ -44,7 +44,7 @@ export default function AdminDashboard() {
 
   async function handleLogout() {
     try {
-      await supabase.auth.signOut();
+      await fetch('/api/auth/logout', { method: 'POST' });
       toast.success('Logged out successfully');
       router.push('/admin');
     } catch (error) {
